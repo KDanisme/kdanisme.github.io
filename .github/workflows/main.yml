@@ -22,3 +22,5 @@ jobs:
         with:
           publish_dir: result
           github_token: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
