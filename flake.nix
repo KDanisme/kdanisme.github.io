@@ -36,8 +36,12 @@
         packages.default = pkgs.stdenvNoCC.mkDerivation {
           name = "website";
           src = ./.;
+          nativeBuildInputs = [yarnModules pkgs.nodejs];
+          configurePhase = ''
+            ln -s ${yarnModules}/node_modules node_modules
+          '';
           buildPhase = ''
-            ${yarnModules}/node_modules/.bin/eleventy
+            npx  eleventy
           '';
 
           installPhase = ''
