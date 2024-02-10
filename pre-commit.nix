@@ -16,6 +16,7 @@
       flakeCheck = false;
       programs = {
         alejandra.enable = true;
+        prettier.enable = true;
       };
     };
   };

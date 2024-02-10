@@ -1,2 +1,2 @@
 serve:
-	eleventy --serve
+	npx eleventy --serve
