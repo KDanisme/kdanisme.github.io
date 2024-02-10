@@ -35,11 +35,7 @@
         };
         packages.default = pkgs.stdenvNoCC.mkDerivation {
           name = "website";
-          src = with lib.fileset;
-            toSource {
-              root = ./.;
-              fileset = unions [./posts];
-            };
+          src = ./.;
           buildPhase = ''
             ${yarnModules}/node_modules/.bin/eleventy
           '';
