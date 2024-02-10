@@ -1,26 +1,52 @@
 {
   outputs = inputs:
-    inputs.flake-parts.lib.mkFlake {inherit inputs;} ({config, ...}: {
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} ({
+      config,
+      lib,
+      ...
+    }: {
       # debug = true;
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
       imports = [
         ./pre-commit.nix
       ];
-      _module.args = {
-        username = "kdanisme";
-        lock = with builtins; (fromJSON (readFile ./flake.lock));
-      };
       perSystem = {
+        self',
         pkgs,
         config,
         system,
         ...
-      }: {
+      }: let
+        yarnModules = pkgs.mkYarnModules {
+          pname = "yarn-modules";
+          version = "1.0.0";
+          yarnLock = ./yarn.lock;
+          packageJSON = ./package.json;
+        };
+      in {
         devShells.default = pkgs.mkShell {
           inherit (config.pre-commit.devShell) shellHook;
           nativeBuildInputs = with pkgs; [
-            nodejs_21
+            nodejs
+            just
+            yarn
+            yarnModules
           ];
+        };
+        packages.default = pkgs.stdenvNoCC.mkDerivation {
+          name = "website";
+          src = with lib.fileset;
+            toSource {
+              root = ./.;
+              fileset = unions [./posts];
+            };
+          buildPhase = ''
+            ${yarnModules}/node_modules/.bin/eleventy
+          '';
+
+          installPhase = ''
+            cp -ar _site $out
+          '';
         };
       };
     });
@@ -47,6 +73,11 @@
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    eleventy = {
+      url = "github:11ty/eleventy?ref=v2.0.1";
+      flake = false;
     };
   };
 }

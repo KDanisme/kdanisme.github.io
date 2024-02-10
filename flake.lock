@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "eleventy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1680015634,
+        "narHash": "sha256-57O37zXHGol2WjVEsKoNRp0nZw0Fcy0OMY/Ks73w/oo=",
+        "owner": "11ty",
+        "repo": "eleventy",
+        "rev": "e71cb94003b5a94dcd40ec96f8f4b455767b9833",
+        "type": "github"
+      },
+      "original": {
+        "owner": "11ty",
+        "ref": "v2.0.1",
+        "repo": "eleventy",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -148,6 +165,7 @@
     },
     "root": {
       "inputs": {
+        "eleventy": "eleventy",
         "flake-parts": "flake-parts",
         "flake-root": "flake-root",
         "nixpkgs": "nixpkgs",
